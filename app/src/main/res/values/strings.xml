@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Dynamic Sample</string>
+    <string name="choose_a_dynamic_module">Choose a dynamic module</string>
+    <string name="chocolate_feature">Chocolate Feature</string>
+    <string name="strawberry_feature">Strawberry Feature</string>
+    <string name="title_chocolatefeature">Chocolate Feature</string>
+    <string name="title_strawberryfeature">Strawberry Feature</string>
+    <string name="open_strawberry">Open Strawberry</string>
+    <string name="open_chocolate">Open Chocolate</string>
+</resources>

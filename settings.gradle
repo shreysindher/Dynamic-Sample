@@ -1,0 +1,4 @@
+include ':strawberryfeature'
+include ':chocolatefeature'
+include ':app'
+rootProject.name = "Dynamic Sample"
