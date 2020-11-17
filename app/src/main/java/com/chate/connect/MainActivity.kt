@@ -2,11 +2,13 @@ package com.chate.connect
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import com.google.android.play.core.splitinstall.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
+import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,29 +31,27 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setupUI() {
-        tvVersion.text = "v ${BuildConfig.VERSION_NAME}"
+        val installListener = SplitInstallStateUpdatedListener {
+            if (it.sessionId() == mySessionID) {
+                when (it.status()) {
+                    REQUIRES_USER_CONFIRMATION -> showStatus("REQUIRES_USER_CONFIRMATION")
+                    DOWNLOADING -> showStatus("DOWNLOADING")
+                    INSTALLING -> showStatus("INSTALLING")
+                    DOWNLOADED -> showStatus("DOWNLOADED")
+                    INSTALLED -> showStatus("INSTALLED")
+                    CANCELED -> showStatus("CANCELED")
+                    PENDING -> showStatus("PENDING")
+                    FAILED -> showStatus("FAILED")
+                    CANCELING -> showStatus("CANCELING")
+                    UNKNOWN -> showStatus("UNKNOWN")
+                }
+            }
+        }
 
         btnFeature1.setOnClickListener {
             val request = SplitInstallRequest.newBuilder()
                 .addModule(CHOCOLATE_FEATURE)
                 .build()
-
-            val installListener = SplitInstallStateUpdatedListener {
-                if (it.sessionId() == mySessionID) {
-                    when (it.status()) {
-                        REQUIRES_USER_CONFIRMATION -> showStatus("REQUIRES_USER_CONFIRMATION")
-                        DOWNLOADING -> showStatus("DOWNLOADING")
-                        INSTALLING -> showStatus("INSTALLING")
-                        DOWNLOADED -> showStatus("DOWNLOADED")
-                        INSTALLED -> showStatus("INSTALLED")
-                        CANCELED -> showStatus("CANCELED")
-                        PENDING -> showStatus("PENDING")
-                        FAILED -> showStatus("FAILED")
-                        CANCELING -> showStatus("CANCELING")
-                        UNKNOWN -> showStatus("UNKNOWN")
-                    }
-                }
-            }
 
             manager.registerListener(installListener)
             manager.startInstall(request)
@@ -84,23 +84,6 @@ class MainActivity : AppCompatActivity() {
             val request = SplitInstallRequest.newBuilder()
                 .addModule(STRAWBERRY_FEATURE)
                 .build()
-
-            val installListener = SplitInstallStateUpdatedListener {
-                if (it.sessionId() == mySessionID) {
-                    when (it.status()) {
-                        REQUIRES_USER_CONFIRMATION -> showStatus("REQUIRES_USER_CONFIRMATION")
-                        DOWNLOADING -> showStatus("DOWNLOADING")
-                        INSTALLING -> showStatus("INSTALLING")
-                        DOWNLOADED -> showStatus("DOWNLOADED")
-                        INSTALLED -> showStatus("INSTALLED")
-                        CANCELED -> showStatus("CANCELED")
-                        PENDING -> showStatus("PENDING")
-                        FAILED -> showStatus("FAILED")
-                        CANCELING -> showStatus("CANCELING")
-                        UNKNOWN -> showStatus("UNKNOWN")
-                    }
-                }
-            }
 
             manager.registerListener(installListener)
             manager.startInstall(request)
